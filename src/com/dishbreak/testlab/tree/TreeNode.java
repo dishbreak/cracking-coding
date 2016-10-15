@@ -2,29 +2,19 @@ package com.dishbreak.testlab.tree;
 
 public class TreeNode {
 	
-	private TreeNode left = null;
-	private TreeNode right = null;
-	private Integer data = null;
+	private Integer key = null;
+	private Integer value = null;
 	
-	public TreeNode(Integer data) {
-		this.data = data;
+	public TreeNode(Integer key, Integer value) {
+		this.key = key;
+		this.value = value;
 	}
 		
-	public TreeNode left() { return left; }
-	
-	public TreeNode right() { return right; }
-	
-	public Integer data() { return data; }
-	
-	public void setLeft(TreeNode node) {
-		this.left = node;
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 	
-	public void setRight(TreeNode node) {
-		this.right = node;
-	}
+	public Integer value() { return this.value; }
 	
-	public void setData(Integer data) {
-		this.data = data;
-	}
+	public Integer key() { return this.key; }
 }
