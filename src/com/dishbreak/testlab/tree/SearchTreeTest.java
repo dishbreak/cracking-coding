@@ -25,5 +25,24 @@ public class SearchTreeTest {
 		assertNull(tree.get(12));
 		assertEquals(17, tree.get(6).intValue());
 	}
+	
+	@Test
+	public void testUpdate() {
+		tree.insert(5, 21);
+		assertEquals(21, tree.get(5).intValue());
+	}
+	
+	@Test
+	public void testDelete() {
+		tree.insert(1, 34);
+		tree.delete(3);
+		assertNull(tree.get(3));
+		
+		Integer[] keys = { 4, 5, 6, 7, 2, 1 };
+		Integer[] values = { 22, 13, 17, 41, 38, 34 };
+		for (int i = 0; i < keys.length; i++) {
+			assertEquals(values[i], tree.get(keys[i]));
+		}
+	}
 
 }
