@@ -22,6 +22,12 @@ public class LinkedListTest {
 	}
 	
 	@Test
+	public void testReverse() {
+		list.reverse();
+		assertEquals("(3,8,5,6,7,5,4)", list.toString());
+	}
+	
+	@Test
 	public void testAddNode() {
 		assertEquals("(4,5,7,6,5,8,3)", list.toString());
 	}

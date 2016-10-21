@@ -131,5 +131,28 @@ public class LinkedList {
 		node.setNext(node.next().next());
 		return true;
 	}
+	
+	public void reverse() {
+		reverse(root);
+	}
+	
+	private Node<Integer> reverse(Node<Integer> iter) {
+		if (iter == null) {
+			return iter;
+		}
+		if (iter.next() == null) {
+			root = iter;
+			return iter;
+		}
+		
+		Node<Integer> nextNode = iter.next();
+		iter.setNext(null);
+		
+		Node<Integer> rest = reverse(nextNode);
+		
+		nextNode.setNext(iter);
+		
+		return rest;
+	}
 }
 
