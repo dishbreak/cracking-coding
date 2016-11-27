@@ -88,5 +88,27 @@ public class LinkedSearchTreeTest {
 		
 		assertTrue(tree.isBalanced());
 	}
+	
+	@Test
+	public void testDelete() {
+		tree.delete(7);
+		assertNull(tree.getValue(7));
+	}
+	
+	@Test
+	public void testDeleteNull() {
+		tree.delete((Integer) null);
+		
+		assertEquals("[( 2 => 35 ), ( 4 => 54 ), ( 5 => 34 ), ( 6 => 23 ), ( 7 => 67 ), ( 8 => 71 ), ( 9 => 24 ), ( 12 => 44 )]", tree.toString());
+		
+	}
+	
+	@Test
+	public void testDeleteBadValue() {
+		tree.delete(81); // not in tree
+		
+		assertEquals("[( 2 => 35 ), ( 4 => 54 ), ( 5 => 34 ), ( 6 => 23 ), ( 7 => 67 ), ( 8 => 71 ), ( 9 => 24 ), ( 12 => 44 )]", tree.toString());
+		
+	}
 
 }	

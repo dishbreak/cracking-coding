@@ -91,6 +91,7 @@ public class LinkedSearchTree {
 			} else if (parent.key() > childNode.key()) {
 				if (parent.left() == null) {
 					parent.setLeft(childNode);
+					childNode.setParent(parent);
 					pass = false;
 				} else {
 					parent = parent.left();
@@ -98,11 +99,13 @@ public class LinkedSearchTree {
 			} else {
 				if (parent.right() == null) {
 					parent.setRight(childNode);
+					childNode.setParent(parent);
 					pass = false;
 				} else {
 					parent = parent.right();
 				}
 			}
+			
 		}
 	}
 	
@@ -166,6 +169,48 @@ public class LinkedSearchTree {
 	
 	public boolean isBalanced() {
 		return Math.abs(getShortestPath(root, 0) - getLongestPath(root, 0)) == 1;
+	}
+	
+	public void delete(Integer key) {
+		if (key == null) return;
+		
+		
+		LinkedTreeNode node = search(new TreeTest() {
+
+			@Override
+			public boolean isMatch(LinkedTreeNode node) {
+				// TODO Auto-generated method stub
+				return key.intValue() == node.key().intValue();
+			}
+			
+		});
+		
+		delete(node);
+		
+	}
+	
+	public void delete(LinkedTreeNode node) {
+		if (node == null) return;
+
+		if (node.isLeaf()) {
+			node.parent().removeChild(node);
+		} else {
+			if (node.left() != null) {
+				LinkedTreeNode maxInSubtree = node.left();
+				while (maxInSubtree.right() != null) {
+					maxInSubtree = maxInSubtree.right();
+				}
+				node.overwrite(maxInSubtree);
+				delete(maxInSubtree);
+			} else {
+				LinkedTreeNode minInSubtree = node.right();
+				while (minInSubtree.left() != null) {
+					minInSubtree = minInSubtree.left();
+				}
+				node.overwrite(minInSubtree);
+				delete(minInSubtree);
+			}
+		}
 	}
 	
 }
