@@ -11,6 +11,10 @@ public class ArrayStack implements Stack<Integer> {
 	public ArrayStack(int stackSize) {
 		array = new Integer[stackSize];
 	}
+	
+	public ArrayStack() {
+		this(STACK_SIZE);
+	}
 
 
 	@Override
@@ -36,6 +40,10 @@ public class ArrayStack implements Stack<Integer> {
 	public void push(Integer data) {
 		endIndex++;
 		array[endIndex] = data;
+	}
+	
+	public boolean isFull() {
+		return endIndex == array.length-1; 
 	}
 
 }
