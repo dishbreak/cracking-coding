@@ -47,6 +47,14 @@ public class LinkedTreeNode {
 		}
 	}
 	
+	public boolean isLeftChild() {
+		return parent != null && parent.left() == this;
+	}
+	
+	public boolean isRightChild() {
+		return parent != null && parent.right() == this;
+	}
+	
 	public boolean isLeaf() {
 		return left == null && right == null;
 	}
