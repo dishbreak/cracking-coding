@@ -10,10 +10,10 @@ import com.dishbreak.testlab.tree.linked.LinkedSearchTree.TreeTest;
 public class LinkedSearchTreeTest {
 	
 	private LinkedSearchTree tree;
+	private static final int[] keys = {5, 6, 12, 4, 7, 9, 8, 2};
 
 	@Before
 	public void setUp() throws Exception {
-		int[] keys = {5, 6, 12, 4, 7, 9, 8, 2};
 		int[] values = {34, 23, 44, 54, 67, 24, 71, 35};
 		
 		tree = LinkedSearchTree.buildFromArray(keys, values);
@@ -130,6 +130,23 @@ public class LinkedSearchTreeTest {
 		
 		assertEquals("[( 2 => 35 ), ( 4 => 54 ), ( 5 => 34 ), ( 6 => 23 ), ( 7 => 67 ), ( 8 => 71 ), ( 9 => 24 ), ( 12 => 44 )]", tree.toString());
 		
+	}
+	
+	@Test
+	public void testGetHeight() {
+		assertEquals(6, tree.getHeight());
+	}
+	
+	@Test
+	public void testFindNextInOrder() {
+		int[] sortedKeys = { 2, 4, 5, 6, 7, 8, 9, 12};
+		
+		for (int i = 0; i < sortedKeys.length - 1; i++) {
+			LinkedTreeNode node = tree.findNextInOrder(sortedKeys[i]);
+			assertEquals("Failed finding successor of " + sortedKeys[i], (Integer) sortedKeys[i+1], node.key());
+		}
+		
+		assertNull(tree.findNextInOrder(12));
 	}
 
 }	

@@ -9,11 +9,11 @@ import java.util.Set;
 
 public class LinkedSearchTree {
 	private LinkedTreeNode root = null;
-	
+
 	public static interface TreeTest {
 		public boolean isMatch(LinkedTreeNode node);
 	}
-	
+
 	public void insert(Integer key, Integer value) {
 		LinkedTreeNode node = new LinkedTreeNode(key, value);
 		if (root == null) {
@@ -22,11 +22,11 @@ public class LinkedSearchTree {
 			siftDown(node);
 		}
 	}
-	
+
 	public Integer getValue(Integer key) {
 		LinkedTreeNode iter = root;
 		Integer value = null;
-		
+
 		while (iter != null) {
 			if (key == iter.key()) {
 				value = iter.value();
@@ -37,32 +37,62 @@ public class LinkedSearchTree {
 				iter = iter.right();
 			}
 		}
-		
+
 		return value;
 	}
-	
-	public LinkedTreeNode findNextInOrder(Integer key) {
-		LinkedTreeNode result = null;
-		
-		
-		
-		
-		
-		
-		
-		return result;
+
+	public LinkedTreeNode getNode(Integer key) {
+		LinkedTreeNode iter = root;
+
+		while (iter != null) {
+			if (key == iter.key()) {
+				break;
+			} else if (key < iter.key()) {
+				iter = iter.left();
+			} else {
+				iter = iter.right();
+			}
+		}
+
+		return iter;
 	}
-	
-	
+
+	public LinkedTreeNode findNextInOrder(Integer key) {
+
+		LinkedTreeNode node = getNode(key);
+		return findNextInOrder(node);
+	}
+
+	public LinkedTreeNode findNextInOrder(LinkedTreeNode node) {
+		LinkedTreeNode result = null;
+
+		if (node == null) return null;
+
+		if (node.right() != null) {
+			result = node.right();
+			while (result.left() != null) {
+				result = result.left();
+			}
+		} else if (node.isLeftChild()) {
+			result = node.parent();
+		} else if (node.isRightChild() && !node.parent().isRightChild()) {
+			result = node.parent().parent();
+		}
+
+		return result;
+
+	}
+
+
 	public LinkedTreeNode search(TreeTest test) {
 		LinkedTreeNode result = null;
-		
+
 		if (root == null) return result;
-		
+
 		Set<LinkedTreeNode> visited = new HashSet<>();
 		Queue<LinkedTreeNode> queue = new LinkedList<>();
 		queue.add(root);
-		
+
 		while (!queue.isEmpty()) {
 			LinkedTreeNode node = queue.remove();
 			if (test.isMatch(node)) {
@@ -77,11 +107,11 @@ public class LinkedSearchTree {
 				queue.add(node.left());
 			}
 		}
-		
+
 		return result;
 	}
-	
-	
+
+
 	private void siftDown(LinkedTreeNode childNode) {
 		boolean pass = true;
 		LinkedTreeNode parent = root;
@@ -105,76 +135,80 @@ public class LinkedSearchTree {
 					parent = parent.right();
 				}
 			}
-			
+
 		}
 	}
-	
+
 	public String toString() {
 		List<LinkedTreeNode> list = new ArrayList<>();
-		
+
 		inOrderTraverse(list, root);
-		
+
 		return list.toString();
-		
+
 	}
-	
+
 	private void inOrderTraverse(List<LinkedTreeNode> list, LinkedTreeNode root) {
 		if (root == null) return;
 		inOrderTraverse(list, root.left());
 		visit(root, list);
 		inOrderTraverse(list, root.right());
 	}
-	
+
 	private void visit(LinkedTreeNode node, List<LinkedTreeNode> list) {
 		list.add(node);
 	}
-	
+
 	public static LinkedSearchTree buildFromArray(int[] keys, int[] values) {
 		LinkedSearchTree tree = new LinkedSearchTree();
-		
+
 		int length = (keys.length > values.length) ? values.length : keys.length;
-		
+
 		for (int i = 0; i < length; i++) {
 			tree.insert(keys[i], values[i]);
 		}
-		
+
 		return tree;
 	}
-	
+
 	public int getShortestPath(LinkedTreeNode node, int steps) {
 		if (node == null) {
 			return steps;
 		}
-		
+
 		steps++;
-		
+
 		int stepsLeft = getShortestPath(node.left(), steps);
 		int stepsRight = getShortestPath(node.right(), steps);
-		
+
 		return (stepsRight > stepsLeft) ? stepsLeft : stepsRight;
 	}
-	
+
 	public int getLongestPath(LinkedTreeNode node, int steps) {
 		if (node == null) {
 			return steps;
 		}
-		
+
 		steps++;
-		
+
 		int stepsLeft = getLongestPath(node.left(), steps);
 		int stepsRight = getLongestPath(node.right(), steps);
-		
+
 		return (stepsRight < stepsLeft) ? stepsLeft : stepsRight;
 	}
-	
+
+	public int getHeight() {
+		return getLongestPath(root, 0);
+	}
+
 	public boolean isBalanced() {
 		return Math.abs(getShortestPath(root, 0) - getLongestPath(root, 0)) == 1;
 	}
-	
+
 	public void delete(Integer key) {
 		if (key == null) return;
-		
-		
+
+
 		LinkedTreeNode node = search(new TreeTest() {
 
 			@Override
@@ -182,13 +216,13 @@ public class LinkedSearchTree {
 				// TODO Auto-generated method stub
 				return key.intValue() == node.key().intValue();
 			}
-			
+
 		});
-		
+
 		delete(node);
-		
+
 	}
-	
+
 	public void delete(LinkedTreeNode node) {
 		if (node == null) return;
 
@@ -212,5 +246,5 @@ public class LinkedSearchTree {
 			}
 		}
 	}
-	
+
 }
