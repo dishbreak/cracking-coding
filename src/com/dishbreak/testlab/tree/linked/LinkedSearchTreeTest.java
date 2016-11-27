@@ -100,6 +100,15 @@ public class LinkedSearchTreeTest {
 	}
 	
 	@Test
+	public void testDeleteFullParent() {
+		tree.insert(13, 46); // will become right child for 12.
+		tree.delete(12);
+		
+		assertEquals((Integer) 46, tree.getValue(13));
+		assertEquals((Integer) 24, tree.getValue(9));
+	}
+	
+	@Test
 	public void testDeleteLeaf() {
 		tree.delete(2);
 		assertNull(tree.getValue(2));

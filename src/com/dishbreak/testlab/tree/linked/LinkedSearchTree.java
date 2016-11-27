@@ -191,6 +191,8 @@ public class LinkedSearchTree {
 	
 	public void delete(LinkedTreeNode node) {
 		if (node == null) return;
+		
+		System.out.println("Deleting " + node);
 
 		if (node.isLeaf()) {
 			node.parent().removeChild(node);
