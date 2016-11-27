@@ -90,9 +90,21 @@ public class LinkedSearchTreeTest {
 	}
 	
 	@Test
-	public void testDelete() {
+	public void testDeleteNonLeaf() {
 		tree.delete(7);
 		assertNull(tree.getValue(7));
+		assertEquals(71, tree.getValue(8).intValue());
+		assertEquals(24, tree.getValue(9).intValue());
+		assertEquals("[( 2 => 35 ), ( 4 => 54 ), ( 5 => 34 ), ( 6 => 23 ), ( 8 => 71 ), ( 9 => 24 ), ( 12 => 44 )]", tree.toString());
+
+	}
+	
+	@Test
+	public void testDeleteLeaf() {
+		tree.delete(2);
+		assertNull(tree.getValue(2));
+		assertEquals("[( 4 => 54 ), ( 5 => 34 ), ( 6 => 23 ), ( 7 => 67 ), ( 8 => 71 ), ( 9 => 24 ), ( 12 => 44 )]", tree.toString());
+
 	}
 	
 	@Test
