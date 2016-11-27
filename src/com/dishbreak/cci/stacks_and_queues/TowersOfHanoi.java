@@ -1,6 +1,5 @@
 package com.dishbreak.cci.stacks_and_queues;
 
-import java.util.Map;
 
 public class TowersOfHanoi {
 	private static class HanoiRod implements Stack<Integer> {
@@ -27,14 +26,13 @@ public class TowersOfHanoi {
 
 		@Override
 		public Integer peek() {
-			// TODO Auto-generated method stub
 			Integer result = null;
 			
 			if (head != null) {
 				result = head.data;
 			}
 			
-			return null;
+			return result;
 		}
 
 		@Override
