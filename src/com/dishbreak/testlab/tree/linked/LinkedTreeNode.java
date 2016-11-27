@@ -48,7 +48,7 @@ public class LinkedTreeNode {
 	}
 	
 	public boolean isLeaf() {
-		return left != null || right != null;
+		return left == null && right == null;
 	}
 	
 	public void overwrite(LinkedTreeNode node) {
