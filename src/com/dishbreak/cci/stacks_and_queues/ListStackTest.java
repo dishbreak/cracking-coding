@@ -2,12 +2,14 @@ package com.dishbreak.cci.stacks_and_queues;
 
 import static org.junit.Assert.*;
 
+import java.util.Comparator;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class ListStackTest {
 	
-	Stack<Integer> stack;
+	ListStack<Integer> stack;
 	
 	@Before
 	public void setUp() {
@@ -72,6 +74,33 @@ public class ListStackTest {
 		
 		assertEquals(4, stack.peek().intValue());
 		assertEquals("(4,3,10,6,4,2)", stack.toString());
+	}
+	
+	@Test
+	public void testSort() {
+		Integer[] values = { 2, 4, 6, 10, 3, 4 };
+		for (Integer value : values ) {
+			stack.push(value); 
+		}
+		
+		stack.sort(new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				if (o1 == null) {
+					return -1;
+				} else if (o2 == null) {
+					return 1;
+				} else if (o1 > o2) {
+					return -1;
+				} else if (o1 < o2) {
+					return 1;
+				} else {
+					return 0; // only possible if o1 == o2
+				}
+			}
+		});
+		
+		assertEquals("(2,3,4,4,6,10)", stack.toString());
 	}
 	
 

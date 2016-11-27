@@ -1,5 +1,7 @@
 package com.dishbreak.cci.stacks_and_queues;
 
+import java.util.Comparator;
+
 import com.dishbreak.cci.linked_lists.*;
 
 public class ListStack<T> implements Stack<T> {
@@ -48,6 +50,25 @@ public class ListStack<T> implements Stack<T> {
 		}
 		buffer.append(")");
 		return buffer.toString();
+	}
+	
+	public Node<T> getTop() {
+		return root;
+	}
+	
+	public void sort(Comparator<T> comparator) {
+		ListStack<T> sortStack = new ListStack<>();
+		
+		while (!this.isEmpty()) {
+			T temp = pop();
+			T top = sortStack.peek();
+
+			while(!sortStack.isEmpty() && comparator.compare(top, temp) > 0 ) {
+				push(sortStack.pop());
+			}
+			sortStack.push(temp);
+		}
+		root = sortStack.getTop();
 	}
 
 }
