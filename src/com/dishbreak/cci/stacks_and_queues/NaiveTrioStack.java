@@ -51,7 +51,7 @@ public class NaiveTrioStack {
 	}
 	
 	public Integer peek(int stackId) {
-		if (stackId > 2) return null;
+		if (stackId > 2 || end[stackId] < 0) return null;
 		
 		Integer result;
 		int baseIndex = end[stackId] * 3 + stackId;
