@@ -246,5 +246,42 @@ public class LinkedSearchTree {
 			}
 		}
 	}
+	
+	
+	public LinkedSearchTree(int[] keys, int[] values) {
+		LinkedTreeNode[] nodes = new LinkedTreeNode[keys.length];
+		
+		for (int i = 0; i < keys.length; i++) {
+			nodes[i] = new LinkedTreeNode(keys[i], values[i]);
+		}
+		
+		root = insertBalanced(nodes, 0, nodes.length -1 );
+	}
+	
+	private static LinkedTreeNode insertBalanced(LinkedTreeNode[] nodes, int startIdx, int endIdx) {
+				
+		if (startIdx > endIdx) return null;
+		if (startIdx == endIdx) return nodes[startIdx];
+		LinkedTreeNode node; 
+		
+		if (endIdx - startIdx == 1) {
+			node = nodes[endIdx];
+			node.setLeft(nodes[startIdx]);
+		} else {
+
+			int midPoint = Math.floorDiv(endIdx+startIdx, 2);
+
+			node = nodes[midPoint];
+			node.setLeft(insertBalanced(nodes, startIdx, midPoint-1));
+			node.setRight(insertBalanced(nodes, midPoint+1, endIdx));
+
+		}
+		
+		return node;
+	}
+	
+	public LinkedSearchTree() {
+		
+	}
 
 }

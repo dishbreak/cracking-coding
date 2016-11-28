@@ -25,10 +25,16 @@ public class LinkedTreeNode {
 	
 	public void setLeft(LinkedTreeNode node) {
 		this.left = node;
+		if (this.left != null) {
+			left.setParent(this);
+		}
 	}
 	
 	public void setRight(LinkedTreeNode node) {
 		this.right = node;
+		if (this.right != null) {
+			right.setParent(this);
+		}
 	}
 	
 	public void setParent(LinkedTreeNode node) {

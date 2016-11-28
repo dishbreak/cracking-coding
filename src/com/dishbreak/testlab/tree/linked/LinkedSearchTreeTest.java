@@ -11,10 +11,11 @@ public class LinkedSearchTreeTest {
 	
 	private LinkedSearchTree tree;
 	private static final int[] keys = {5, 6, 12, 4, 7, 9, 8, 2};
-
+	private static final int[] values = {34, 23, 44, 54, 67, 24, 71, 35};
+	
 	@Before
 	public void setUp() throws Exception {
-		int[] values = {34, 23, 44, 54, 67, 24, 71, 35};
+		
 		
 		tree = LinkedSearchTree.buildFromArray(keys, values);
 	}
@@ -147,6 +148,13 @@ public class LinkedSearchTreeTest {
 		}
 		
 		assertNull(tree.findNextInOrder(12));
+	}
+	
+	@Test 
+	public void testBalancedList() {
+		int[] sortedKeys = { 2, 4, 5, 6, 7, 8, 9, 12};
+		tree = new LinkedSearchTree(sortedKeys, values);
+		assertTrue(tree.isBalanced());
 	}
 
 }	
