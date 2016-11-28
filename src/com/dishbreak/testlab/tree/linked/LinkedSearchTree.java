@@ -283,5 +283,37 @@ public class LinkedSearchTree {
 	public LinkedSearchTree() {
 		
 	}
+	
+	public List<List<LinkedTreeNode>> getNodesPerLevel() {
+		List<List<LinkedTreeNode>> result = new ArrayList<>();
+		
+		if (root != null) {
+			result.add(0, new LinkedList<>());
+			result.get(0).add(root);
+			Integer level = 1;
+			insertNodesAtLevel(result, level);
+		}
+		return result;
+	}
+
+	private void insertNodesAtLevel(List<List<LinkedTreeNode>> result, Integer level) {
+		result.add(level, new LinkedList<LinkedTreeNode>());
+		
+		for (LinkedTreeNode node : result.get(level-1)) {
+			if (node.left() != null) {
+				result.get(level).add(node.left());
+			}
+			if (node.right() != null) {
+				result.get(level).add(node.right());
+			}
+		}
+		
+		if (result.get(level).size() > 0) {
+			insertNodesAtLevel(result, ++level);
+		} else {
+			result.remove(level.intValue());
+		}
+		
+	}
 
 }

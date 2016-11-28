@@ -2,6 +2,8 @@ package com.dishbreak.testlab.tree.linked;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -155,6 +157,13 @@ public class LinkedSearchTreeTest {
 		int[] sortedKeys = { 2, 4, 5, 6, 7, 8, 9, 12};
 		tree = new LinkedSearchTree(sortedKeys, values);
 		assertTrue(tree.isBalanced());
+	}
+	
+	@Test
+	public void testInsertNodesAtLevel() {
+		List<List<LinkedTreeNode>> nodes = tree.getNodesPerLevel();
+		
+		assertEquals("[[( 5 => 34 )], [( 4 => 54 ), ( 6 => 23 )], [( 2 => 35 ), ( 12 => 44 )], [( 7 => 67 )], [( 9 => 24 )], [( 8 => 71 )]]", nodes.toString());
 	}
 
 }	
