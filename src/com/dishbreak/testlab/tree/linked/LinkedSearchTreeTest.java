@@ -165,5 +165,47 @@ public class LinkedSearchTreeTest {
 		
 		assertEquals("[[( 5 => 34 )], [( 4 => 54 ), ( 6 => 23 )], [( 2 => 35 ), ( 12 => 44 )], [( 7 => 67 )], [( 9 => 24 )], [( 8 => 71 )]]", nodes.toString());
 	}
+	
+	@Test
+	public void testSearchBreadthFirst() {
+		LinkedTreeNode node = tree.search(new TreeTest() {
+			@Override
+			public boolean isMatch(LinkedTreeNode node) {
+				return node.key().intValue() == 7;
+			}
+		});
+		
+		assertEquals((Integer) 7, node.key());
+	}
+	
+	@Test
+	public void testCommonAncestorParent1() {
+		
+		LinkedTreeNode node1 = tree.getNode(6);
+		LinkedTreeNode node2 = tree.getNode(9);
+		
+		assertEquals(node1, tree.getCommonAncestor(node1, node2));
+	}
+	
+	@Test
+	public void testCommonAncestorParent2() {
+		
+		LinkedTreeNode node1 = tree.getNode(9);
+		LinkedTreeNode node2 = tree.getNode(6);
+		
+		assertEquals(node2, tree.getCommonAncestor(node1, node2));
+	}
+	
+	@Test
+	public void testCommonAncestorNotParent() {
+		tree.insert(13, 56);
+		tree.insert(15, 62);
+		
+		LinkedTreeNode node1 = tree.getNode(2);
+		LinkedTreeNode node2 = tree.getNode(13);
+		LinkedTreeNode expected = tree.getNode(5);
+		
+		assertEquals(expected, tree.getCommonAncestor(node1, node2));
+	}
 
 }	

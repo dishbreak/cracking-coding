@@ -13,6 +13,10 @@ public class LinkedSearchTree {
 	public static interface TreeTest {
 		public boolean isMatch(LinkedTreeNode node);
 	}
+	
+	private static interface TreeGetter {
+		public LinkedTreeNode getNode(LinkedTreeNode node);
+	}
 
 	public void insert(Integer key, Integer value) {
 		LinkedTreeNode node = new LinkedTreeNode(key, value);
@@ -313,6 +317,122 @@ public class LinkedSearchTree {
 		} else {
 			result.remove(level.intValue());
 		}
+		
+	}
+		
+	public LinkedTreeNode search(LinkedTreeNode startingNode, TreeTest test) {
+		Queue<LinkedTreeNode> queue = new LinkedList<>();
+		
+		queue.add(startingNode);
+		return bfs(queue, test);
+	}
+	
+	private LinkedTreeNode bfs(Queue<LinkedTreeNode> queue, TreeTest test) {
+		Queue<LinkedTreeNode> newQueue = new LinkedList<>();
+		
+		for (LinkedTreeNode node : queue) {
+			if (test.isMatch(node)) {
+				return node;
+			}
+			if (node.left() != null) {
+				newQueue.add(node.left());
+			}
+			if (node.right() != null) {
+				newQueue.add(node.right());
+			}
+		}
+		
+		if (newQueue.isEmpty()) {
+			return null;
+		} else {
+			return bfs(newQueue, test);
+		}
+	}
+	
+	public LinkedTreeNode getCommonAncestor(LinkedTreeNode o1, LinkedTreeNode o2) {
+		LinkedTreeNode result = null;
+		
+		result = search(o1, new TreeTest() {
+			
+			@Override
+			public boolean isMatch(LinkedTreeNode node) {
+				return node == o2;
+			}
+		});
+		
+		if (result == o2) {
+			return o1;
+		}
+		
+		TreeTest findOther = new TreeTest() {
+			@Override
+			public boolean isMatch(LinkedTreeNode node) {
+				return node == o1;
+			}
+		};
+		
+		result = search(o2, findOther);
+		
+		if (result == o1) {
+			return o2;
+		}
+		
+		if (o2.parent() != null) {
+			LinkedTreeNode startingPoint;
+			startingPoint = o2.parent();
+			
+			TreeTest test;
+			TreeGetter getter;
+			if (o2.isLeftChild()) {
+				test = new TreeTest() {
+
+					@Override
+					public boolean isMatch(LinkedTreeNode node) {
+						return node.right() != null;
+					}
+
+				};
+				getter = new TreeGetter() {
+
+					@Override
+					public LinkedTreeNode getNode(LinkedTreeNode node) {
+						return search(node.right(), findOther);
+					}
+					
+				};
+			} else {
+				test = new TreeTest() {
+
+					@Override
+					public boolean isMatch(LinkedTreeNode node) {
+						return node.left() != null;
+					}
+
+				};
+				getter = new TreeGetter() {
+
+					@Override
+					public LinkedTreeNode getNode(LinkedTreeNode node) {
+						return search(node.left(), findOther);
+					}
+					
+				};
+			}
+			
+			while (startingPoint != null) {
+				
+				if (test.isMatch(startingPoint)) {
+					LinkedTreeNode other = getter.getNode(startingPoint);
+					if (other != null) {
+						return startingPoint;
+					}
+				}
+				
+				startingPoint = startingPoint.parent();
+			}
+		}
+		
+		return result;
 		
 	}
 
