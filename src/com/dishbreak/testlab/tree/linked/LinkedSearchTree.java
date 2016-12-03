@@ -2,10 +2,12 @@ package com.dishbreak.testlab.tree.linked;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+
 
 public class LinkedSearchTree {
 	private LinkedTreeNode root = null;
@@ -387,6 +389,65 @@ public class LinkedSearchTree {
 		}
 		
 		return result;
+		
+	}
+	
+	public LinkedTreeNode getRoot() {
+		return root;
+	}
+	
+	public boolean isSubtree(LinkedSearchTree tree) {
+		boolean isTree = true;
+		
+		if (tree == null || tree.getRoot() == null) return false;
+		
+		LinkedTreeNode node = tree.getRoot();
+		
+		LinkedTreeNode result = search((LinkedTreeNode item) -> { return node.equals(item);});
+		
+		if (result == null) return false;
+		
+		isTree = bfsMatch(result, node);
+		
+		return isTree;
+	}
+
+	private boolean bfsMatch(LinkedTreeNode result, LinkedTreeNode node) {
+		LinkedList<LinkedTreeNode> resultQueue = new LinkedList<>();
+		resultQueue.add(result);
+		LinkedList<LinkedTreeNode> nodeQueue = new LinkedList<>();
+		nodeQueue.add(node);
+		return bfsMatch(resultQueue, nodeQueue);
+	}
+
+	private boolean bfsMatch(LinkedList<LinkedTreeNode> resultQueue,
+			LinkedList<LinkedTreeNode> nodeList) {
+		Iterator<LinkedTreeNode> iter = resultQueue.iterator();
+		Iterator<LinkedTreeNode> nodeIter = nodeList.iterator();
+		
+		LinkedList<LinkedTreeNode> nextResultQueue = new LinkedList<>();
+		LinkedList<LinkedTreeNode> nextNodeQueue = new LinkedList<>();
+		
+		while(iter.hasNext() && nodeIter.hasNext()) { 
+			LinkedTreeNode nextResult = iter.next();
+			LinkedTreeNode nextNode = nodeIter.next();
+			
+			if (nextNode.equals(nextResult)) {
+				nextResult.addChildrenToList(nextResultQueue);
+				nextNode.addChildrenToList(nextNodeQueue);
+			} else {
+				return false;
+			}
+		}
+		
+		boolean bothQueuesEmpty = nextResultQueue.isEmpty() && nextNodeQueue.isEmpty();
+		boolean bothQueuesSameSize = nextResultQueue.size() == nextNodeQueue.size();
+		boolean allNodesVisited = !iter.hasNext() && !nodeIter.hasNext();
+		
+		if (!allNodesVisited) return false; //this means the input queues weren't the same size.
+		if (!bothQueuesSameSize) return false; //this means some of the input nodes were actually leaves.
+		if (!bothQueuesEmpty) return bfsMatch(nextResultQueue, nextNodeQueue);
+		else return true; //this means that the input was just leaves.
 		
 	}
 

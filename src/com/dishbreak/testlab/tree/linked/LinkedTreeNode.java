@@ -1,5 +1,7 @@
 package com.dishbreak.testlab.tree.linked;
 
+import java.util.List;
+
 public class LinkedTreeNode {
 	
 	private LinkedTreeNode left;
@@ -68,6 +70,17 @@ public class LinkedTreeNode {
 	public void overwrite(LinkedTreeNode node) {
 		key = node.key;
 		value = node.value;
+	}
+	
+	public void addChildrenToList(List<LinkedTreeNode> list) {
+		if (left != null) list.add(left);
+		if (right != null) list.add(right);
+	}
+	
+	public boolean equals(LinkedTreeNode other) {
+		return 
+				key.intValue() == other.key().intValue() &&
+				value.intValue() == other.value().intValue();
 	}
 	
 }

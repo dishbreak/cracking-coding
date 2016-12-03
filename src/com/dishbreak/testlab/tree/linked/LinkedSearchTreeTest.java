@@ -180,6 +180,56 @@ public class LinkedSearchTreeTest {
 		assertEquals(expected, tree.getCommonAncestor(node1, node2));
 	}
 	
+	@Test
+	public void testIsSubtreeNull() {
+		LinkedSearchTree otherTree = null;
+		
+		assertFalse(tree.isSubtree(otherTree));
+	}
 	
+	@Test
+	public void testIsSubtreeEmpty() {
+		LinkedSearchTree otherTree = new LinkedSearchTree();
+		
+		assertFalse(tree.isSubtree(otherTree));
+	}
+	
+	@Test
+	public void testIsSubtreeMismatched() {
+		int[] keys = {
+				 50,  25,  75,  13,  40,  60,
+				100,   5,   6,  30,  45,  55,
+				 70,  90, 120,  42,  48,  58,
+				 47
+		};
+		
+		int[] subtreeKeys = {
+			40, 30, 45, 42, 60, 52	
+		};
+		
+		tree = LinkedSearchTree.buildFromArray(keys, keys);
+		LinkedSearchTree otherTree = LinkedSearchTree.buildFromArray(subtreeKeys, subtreeKeys);
+		
+		assertFalse(tree.isSubtree(otherTree));
+	}
+	
+	@Test
+	public void testIsSubtreeMatched() {
+		int[] keys = {
+				 50,  25,  75,  13,  40,  60,
+				100,   5,   6,  30,  45,  55,
+				 70,  90, 120,  42,  48,  58,
+				 47
+		};
+		
+		int[] subtreeKeys = {
+			40, 30, 45, 42, 48, 47	
+		};
+		
+		tree = LinkedSearchTree.buildFromArray(keys, keys);
+		LinkedSearchTree otherTree = LinkedSearchTree.buildFromArray(subtreeKeys, subtreeKeys);
+		
+		assertTrue(tree.isSubtree(otherTree));
+	}
 
 }	
