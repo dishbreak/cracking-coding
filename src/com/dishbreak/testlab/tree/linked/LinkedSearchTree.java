@@ -212,15 +212,8 @@ public class LinkedSearchTree {
 	public void delete(Integer key) {
 		if (key == null) return;
 
-
-		LinkedTreeNode node = search(new TreeTest() {
-
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				// TODO Auto-generated method stub
-				return key.intValue() == node.key().intValue();
-			}
-
+		LinkedTreeNode node = search((LinkedTreeNode item) -> { 
+			return key.intValue() == item.key().intValue(); 
 		});
 
 		delete(node);
@@ -351,25 +344,14 @@ public class LinkedSearchTree {
 	
 	public LinkedTreeNode getCommonAncestor(LinkedTreeNode o1, LinkedTreeNode o2) {
 		LinkedTreeNode result = null;
+		result = search(o1, (LinkedTreeNode node) -> { return node == o2; });
 		
-		result = search(o1, new TreeTest() {
-			
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node == o2;
-			}
-		});
 		
 		if (result == o2) {
 			return o1;
 		}
 		
-		TreeTest findOther = new TreeTest() {
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node == o1;
-			}
-		};
+		TreeTest findOther = (LinkedTreeNode node) -> { return node == o1; };
 		
 		result = search(o2, findOther);
 		
@@ -384,39 +366,11 @@ public class LinkedSearchTree {
 			TreeTest test;
 			TreeGetter getter;
 			if (o2.isLeftChild()) {
-				test = new TreeTest() {
-
-					@Override
-					public boolean isMatch(LinkedTreeNode node) {
-						return node.right() != null;
-					}
-
-				};
-				getter = new TreeGetter() {
-
-					@Override
-					public LinkedTreeNode getNode(LinkedTreeNode node) {
-						return search(node.right(), findOther);
-					}
-					
-				};
+				test = (LinkedTreeNode node) -> { return node.right() != null; };
+				getter = (LinkedTreeNode node) -> { return search(node.right(), findOther); };
 			} else {
-				test = new TreeTest() {
-
-					@Override
-					public boolean isMatch(LinkedTreeNode node) {
-						return node.left() != null;
-					}
-
-				};
-				getter = new TreeGetter() {
-
-					@Override
-					public LinkedTreeNode getNode(LinkedTreeNode node) {
-						return search(node.left(), findOther);
-					}
-					
-				};
+				test = (LinkedTreeNode node) -> { return node.left() != null; };
+				getter = (LinkedTreeNode node) -> { return search(node.left(), findOther); };
 			}
 			
 			while (startingPoint != null) {
