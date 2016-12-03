@@ -7,8 +7,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dishbreak.testlab.tree.linked.LinkedSearchTree.TreeTest;
-
 public class LinkedSearchTreeTest {
 	
 	private LinkedSearchTree tree;
