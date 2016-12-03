@@ -16,7 +16,7 @@ public class TrieNodeTest {
 
     @Test
     public void testInsertChildToLeaf() {
-        TrieNode node = new TrieNode("bongo");
+        TrieNode node = new TrieNode("ongo");
         node.setLeaf(true);
 
         TrieNode childNode = new TrieNode("ingo");
