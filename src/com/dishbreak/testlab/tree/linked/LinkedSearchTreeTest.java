@@ -35,15 +35,8 @@ public class LinkedSearchTreeTest {
 	
 	@Test
 	public void testSearchPositive() {
-		LinkedTreeNode node = tree.search(new TreeTest() {
-
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node.key() == 8;
-			}
-			
-		});
-		
+		LinkedTreeNode node = tree.search((LinkedTreeNode target) -> { return target.key().intValue() == 8; });
+				
 		assertEquals(71, node.value().intValue());
 	}
 	
@@ -51,28 +44,14 @@ public class LinkedSearchTreeTest {
 	public void testSearchEmpty() {
 		tree = new LinkedSearchTree();
 		
-		LinkedTreeNode node = tree.search(new TreeTest() {
-
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node.key() == 8;
-			}
-			
-		});
+		LinkedTreeNode node = tree.search((LinkedTreeNode target) -> { return target.key().intValue() == 8; });
 		
 		assertNull(node);
 	}
 	
 	@Test
 	public void testSearchNegative() {
-		LinkedTreeNode node = tree.search(new TreeTest() {
-
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node.key() == 90;
-			}
-			
-		});
+		LinkedTreeNode node = tree.search((LinkedTreeNode target) -> { return target.key().intValue() == 90;});
 		
 		assertNull(node);
 	}
@@ -168,13 +147,8 @@ public class LinkedSearchTreeTest {
 	
 	@Test
 	public void testSearchBreadthFirst() {
-		LinkedTreeNode node = tree.search(new TreeTest() {
-			@Override
-			public boolean isMatch(LinkedTreeNode node) {
-				return node.key().intValue() == 7;
-			}
-		});
-		
+		LinkedTreeNode node = tree.search((LinkedTreeNode target) -> { return target.key().intValue() == 7; });
+
 		assertEquals((Integer) 7, node.key());
 	}
 	
@@ -207,5 +181,7 @@ public class LinkedSearchTreeTest {
 		
 		assertEquals(expected, tree.getCommonAncestor(node1, node2));
 	}
+	
+	
 
 }	
