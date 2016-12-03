@@ -82,7 +82,7 @@ public class SumPathsTreeTest {
     public void testFindAllPaths() {
         List<Path> paths = tree.findAllPaths(67);
         
-        System.out.println(paths);
+        assertEquals("[[65, 2], [53, 14], [67]]", paths.toString());
     }
 
 }
