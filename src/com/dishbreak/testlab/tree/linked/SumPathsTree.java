@@ -5,12 +5,6 @@ import java.util.function.Predicate;
 
 public class SumPathsTree {
     
-    @SuppressWarnings("unused")
-    private static final int NO_MATCH = 0;
-    private static final int LEFT_MATCH = 1;
-    private static final int RIGHT_MATCH = 2;
-    private static final int BOTH_MATCH = 3;
-    
     public static class Node {
         private final int value;
         private Node left;
@@ -43,58 +37,9 @@ public class SumPathsTree {
         public String toString() {
             return Integer.toString(value);
         }
-        
-        public int childMatch(Predicate<Node> test) {
-            int result = 0;
-            if (left != null && test.test(left)) result = result | 1;
-            if (right != null && test.test(right)) result = result | 2;
-            return result;
-        }
        
     }
-    
-    @SuppressWarnings("serial")
-    public static class Path extends LinkedList<Node> {
-        private int sum;
-        Node end;
         
-        public Path() {
-            
-        }
-        
-        public Path(Path other) {
-            super(other);
-            sum = other.getSum();
-            end = other.getEnd();
-        }
-        
-        @Override
-        public boolean add(Node n) {
-            end = n;
-            sum += n.value();
-            return super.add(n);
-        }
-        
-        public int getSum() {
-            return sum;
-        }
-        
-        public Node getEnd() {
-            return end;
-        }
-        
-        public void addLeft() {
-            add(end.left());
-        }
-        
-        public void addRight() {
-            add(end.right());
-        }
-        
-        
-        
-    }
-    
     Node root;
     
     public void setRoot(Node root) {
@@ -141,83 +86,61 @@ public class SumPathsTree {
         SumPathsTree tree = new SumPathsTree();
         
         Node[] nodes = new Node[values.length];
-        for (int i = 0; i < values.length - 1; i++) {
+        for (int i = 0; i < values.length; i++) {
             nodes[i] = new Node(values[i]);
         }
         
-        tree.setRoot(buildSubtree(nodes, 0, values.length - 1));
+        tree.setRoot(buildSubTree(0, nodes));
         
         return tree;
     }
     
-    private static Node buildSubtree(Node[] nodes, int start, int end) {
-        
-        int midpoint = (start + end) / 2;
-        Node selectedNode = nodes[midpoint];
-        if (start == end) {
-            return null;
-        } else if (midpoint == start) {
-            selectedNode.setRight(nodes[end]);
-        } else if (end - start == 2) {
-            selectedNode.setLeft(nodes[start]);
-            selectedNode.setRight(nodes[end]);
-        } else {
-            selectedNode.setLeft(buildSubtree(nodes, start, midpoint - 1));
-            selectedNode.setRight(buildSubtree(nodes, midpoint + 1, end));
-        }
-        return selectedNode;
-    }
     
-    public List<Path> findAllPaths(int target) {
-        List<Path> result = new ArrayList<>();
+    private static Node buildSubTree(int i, Node[] nodes) {
+        if (i > nodes.length - 1) return null;
         
-        List<Node> startingPoints = findAllMatches(n -> { return n.value <= target; } );
-        
-        for (Node node : startingPoints) {
-            result.addAll(findAllPathsFromNode(node, target));
-        }
-        
-        return result;
-    }
-    
-    private List<Path> findAllPathsFromNode(Node startingPoint, int target) {
-        List<Path> result = new ArrayList<>();
-        List<Path> working = new ArrayList<>();
-        
-        Path startingPath = new Path();
-        startingPath.add(startingPoint);
-        
-        working.add(startingPath);
-        
-        while (!working.isEmpty()) {
-            ListIterator<Path> iter = working.listIterator();
-            while(iter.hasNext()) {
-                Path path = iter.next();
-                if (path.getSum() == target) {
-                    iter.remove();
-                    result.add(path);
-                    continue;
-                }
-                
-                Node end = path.getEnd();
-                int childSearch = end.childMatch(n -> { return (end.value() + n.value()) <= target; });
-                if (childSearch == LEFT_MATCH) {
-                    path.addLeft();
-                } else if (childSearch == RIGHT_MATCH) {
-                    path.addRight();
-                } else if (childSearch == BOTH_MATCH) {
-                    Path otherPath = new Path(path);
-                    path.addLeft();
-                    otherPath.addRight();
-                    iter.add(otherPath);
-                } else { //NO_MATCH
-                    iter.remove();
-                }
-            }
-        }
+        Node result = nodes[i];
+        result.setLeft(buildSubTree(2*i + 1, nodes));
+        result.setRight(buildSubTree(2*i + 2, nodes));
         
         return result;
     }
 
+    public List<String> findAllPaths(int target) {
+        List<String> results = new ArrayList<>();
+        findSum(root, target, new ArrayList<>(), 0, results);
+        return results;
+    }
+    
+    private void findSum (Node tail, int target, ArrayList<Integer> buffer, int level, List<String> results) {
+        if (tail == null) return;
+        
+        int remaining = target;
+        buffer.add(tail.value());
+        for (int i = level; i > -1; i--) {
+            remaining -= buffer.get(i);
+            if (remaining == 0) {
+                results.add(pathToString(buffer, i, level));
+            }
+        }
+        
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer> bufferLeft = (ArrayList<Integer>) buffer.clone();
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer> bufferRight = (ArrayList<Integer>) buffer.clone();
+        
+        findSum(tail.left, target, bufferLeft, level + 1, results);
+        findSum(tail.right, target, bufferRight, level + 1, results);
+
+    }
+    
+    private String pathToString(ArrayList<Integer> buffer, int startingPoint, int level) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = startingPoint; i <= level; i++) {
+            builder.append(buffer.get(i));
+            if (i != level) builder.append(" -> ");
+        }
+        return builder.toString();
+    }
 
 }

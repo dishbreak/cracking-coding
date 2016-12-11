@@ -2,13 +2,13 @@ package com.dishbreak.testlab.tree.linked;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.dishbreak.testlab.tree.linked.SumPathsTree.Node;
-import com.dishbreak.testlab.tree.linked.SumPathsTree.Path;
 
 public class SumPathsTreeTest {
     
@@ -41,22 +41,9 @@ public class SumPathsTreeTest {
                 .mapToInt(n -> n.value())
                 .toArray();
         
-        int[] resultingOrder = {
-                65, 2, 53, 29, 26, 3, 14, 54, 72, 4, 
-                59, 85, 5, 96, 100, 36, 82, 87, 73, 25, 
-                56, 52, 34, 66, 74, 49, 22, 78, 42, 51, 
-                17, 71, 43, 99, 20, 55, 11, 38, 48, 41, 
-                15, 27, 81, 84, 35, 95, 47, 90, 92, 69, 
-                10, 91, 45, 93, 97, 7, 58, 75, 28, 63, 
-                62, 89, 19, 57, 1, 64, 37, 40, 31, 77, 
-                6, 21, 13, 9, 24, 12, 32, 76, 79, 33, 
-                83, 70, 98, 94, 61, 60, 68, 18, 16, 46, 
-                23, 67, 86, 30, 50, 80, 44, 88, 39
-        };
         
         
-        
-        assertArrayEquals(resultingOrder, actualOrder);
+        assertArrayEquals(values, actualOrder);
         
     }
     
@@ -68,21 +55,37 @@ public class SumPathsTreeTest {
                 .mapToInt(n -> n.value())
                 .toArray();
         
-        int[] expected = {
-                72, 85, 96, 100, 82, 87, 73, 74, 78, 
-                71, 99, 81, 84, 95, 90, 92, 91, 93, 
-                97, 75, 89, 77, 76, 79, 83, 98, 94, 
-                86, 80, 88
-        };
+        List<Integer> valList = new ArrayList<>();
+        
+        for(int value : values) {
+            valList.add(value);
+        }
+        
+        int[] expected = valList.stream()
+                .filter(t -> t > 70)
+                .mapToInt(t -> t.intValue())
+                .toArray();
+        
         
         assertArrayEquals(expected, result);
     }
     
     @Test
     public void testFindAllPaths() {
-        List<Path> paths = tree.findAllPaths(67);
+        int[] numbers = {5, -5, 0, 1, 4, -5, 1, 3, -2, -5, -4, 3, -3, -2, 3 };
+        tree = SumPathsTree.buildFromArray(numbers);
         
-        assertEquals("[[65, 2], [53, 14], [67]]", paths.toString());
+        List<String> actual = tree.findAllPaths(0);
+        
+        List<String> expected = new ArrayList<>();
+        
+        expected.add("5 -> -5");
+        expected.add("4 -> -4");
+        expected.add("5 -> -5 -> 4 -> -4");
+        expected.add("0");
+        expected.add("5 -> 0 -> -5");
+        
+        assertEquals(expected, actual);
     }
 
 }
