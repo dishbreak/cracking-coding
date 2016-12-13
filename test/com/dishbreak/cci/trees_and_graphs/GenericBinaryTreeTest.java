@@ -2,7 +2,7 @@ package com.dishbreak.cci.trees_and_graphs;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -157,6 +157,35 @@ public class GenericBinaryTreeTest {
         
         assertFalse("Tree with missing subtree is unbalanced.", tree.isBalanced());
         
+    }
+    
+    @Test
+    public void testGetValuesAtEachLevel() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        Integer[][] expectedArray = {
+                { 1 },
+                { 2, 3 },
+                { 4, 5, 6, 7 },
+                { 8, 9, 10, 11, 12, 13, 14, 15 }
+        };
+        
+        List<List<Node<Integer>>> expectedList = new ArrayList<>(4);
+        for (Integer[] level : expectedArray) {
+            List<Node<Integer>> list = new LinkedList<>();
+            for (Integer value : level) {
+                list.add(new Node<>(value));
+            }
+            expectedList.add(list);
+        }
+        
+        assertEquals(expectedList, tree.getValuesAtEachLevel());
     }
 
 }

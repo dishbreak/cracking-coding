@@ -136,4 +136,31 @@ public class GenericBinaryTree<T> {
         return null;
     }
     
+    List<List<Node<T>>> getValuesAtEachLevel() {
+        List<List<Node<T>>> results = new ArrayList<>();
+        
+        List<Node<T>> firstLevel = new LinkedList<>();
+        firstLevel.add(getRoot());
+        results.add(firstLevel);
+        
+        loadAtLevel(results, 1);
+        
+        return results;
+    }
+    
+    private void loadAtLevel(List<List<Node<T>>> list, int level) {
+        List<Node<T>> levelList = new LinkedList<Node<T>>();
+        
+        for (Node<T> node : list.get(level - 1)) {
+            if (node.left() != null) levelList.add(node.left());
+            if (node.right() != null) levelList.add(node.right());
+        }
+        
+        if (levelList.isEmpty()) return;
+        
+        level++;
+        list.add(levelList);
+        loadAtLevel(list, level);
+    }
+    
 }
