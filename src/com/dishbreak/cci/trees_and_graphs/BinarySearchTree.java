@@ -1,5 +1,7 @@
 package com.dishbreak.cci.trees_and_graphs;
 
+import java.lang.reflect.Array;
+
 public class BinarySearchTree<V> extends GenericBinaryTree<Integer> {
     
     public 
@@ -103,6 +105,38 @@ public class BinarySearchTree<V> extends GenericBinaryTree<Integer> {
         NodeEntry<Integer, V> node = findNode(key);
         if (node == null) return null;
         else return node.value();
+    }
+    
+    public static <V> BinarySearchTree<V> buildBalanced(Integer[] keys, V[] values) {
+        int limit = Math.min(keys.length, values.length);
+        
+        @SuppressWarnings("unchecked")
+        NodeEntry<Integer, V>[] nodeEntries = (NodeEntry<Integer, V>[]) Array.newInstance(NodeEntry.class, limit);
+        
+        for (int i = 0; i < limit; i++) {
+            nodeEntries[i] = new NodeEntry<Integer, V>(keys[i], values[i]);
+        }
+        
+        BinarySearchTree<V> tree = new BinarySearchTree<V>();
+        
+        @SuppressWarnings("unchecked")
+        Node<Integer> root = (Node<Integer>) buildSubTree(nodeEntries, 0, limit-1);
+        tree.setRoot(root);
+        
+        return tree;
+    }
+    
+    private static <V> NodeEntry<Integer, V> buildSubTree(NodeEntry<Integer, V>[] nodeEntries, int indexStart, int indexEnd) {
+        int midPoint = (indexStart + indexEnd) / 2;
+        NodeEntry<Integer, V> node = nodeEntries[midPoint];
+        if (indexStart != indexEnd) {
+            if (midPoint != indexStart) {
+                node.setLeft(buildSubTree(nodeEntries, indexStart, midPoint - 1));
+            } 
+            node.setRight(buildSubTree(nodeEntries, midPoint + 1, indexEnd));
+        }        
+        
+        return node;
     }
  
 }

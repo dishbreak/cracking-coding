@@ -111,5 +111,37 @@ public class BinarySearchTreeTest {
         assertEquals(tree.get(82), "postpeduncular");
         assertEquals(tree.get(87), "alloa");
     }
+    
+    @Test
+    public void buildBalancedTree() {
+        Integer[] keys = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        String[] values = {
+                "michiganian",
+                "nontransforming",
+                "shf",
+                "moxie",
+                "dun",
+                "ophyte",
+                "miscounselled",
+                "esterifying",
+                "middlemost",
+                "valuta",
+                "swagsman",
+                "receptual",
+                "unprotecting",
+                "audiometer",
+                "august"
+        };
+        
+        tree = BinarySearchTree.buildBalanced(keys, values);
+        
+        assertFalse(tree.isEmpty());
+        assertTrue(tree.isBalanced());
+    }
 
 }
