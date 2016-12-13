@@ -72,5 +72,91 @@ public class GenericBinaryTreeTest {
 
         assertArrayEquals(expectedValues, actualValues);
     }
+    
+    @Test
+    public void testDeleteSubtreeEmpty() {
+        tree = new GenericBinaryTree<Integer>();
+        
+        tree.deleteSubtreeAt(t -> { return t == 15; });
+        
+        assertTrue("Empty tree should be empty after delete operation.", tree.isEmpty());
+    }
+    
+    @Test
+    public void testDeleteNonExistentSubtree() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        tree.deleteSubtreeAt(t -> { return t == 16; });
+        
+        Object[] actualValues = tree.listAllValues().toArray();
+        
+        assertArrayEquals("Tree should be unchanged if no node matches delete predicate.", treeValues, actualValues);
+    }
+    
+    @Test
+    public void testDeleteActualSubtree() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        tree.deleteSubtreeAt(t -> { return t == 6; });
+        
+        Integer[] expectedValues = {
+                1, 2, 3, 4, 5,
+                7, 8, 9, 10,
+                11, 14, 15
+        };
+        
+        assertArrayEquals("Tree should no longer have subtree containing 6, 12, and 13", 
+                expectedValues, tree.listAllValues().toArray());
+    }
+    
+    @Test 
+    public void testEmptyTreeBalanced() {
+        
+        tree = new GenericBinaryTree<>();
+        
+        assertTrue("Empty tree should be balanced.", tree.isBalanced());
+    }
+    
+    @Test 
+    public void testFullTreeBalanced() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        assertTrue("Full tree should be balanced.", tree.isBalanced());
+
+    }
+    
+    @Test
+    public void testTreeUnbalanced() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        tree.deleteSubtreeAt(t -> { return t == 6; });
+        
+        assertFalse("Tree with missing subtree is unbalanced.", tree.isBalanced());
+        
+    }
 
 }

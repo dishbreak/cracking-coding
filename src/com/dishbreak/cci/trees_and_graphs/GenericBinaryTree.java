@@ -6,10 +6,24 @@ import java.util.*;
 
 public class GenericBinaryTree<T> {
     
-    Node<T> root = null;
+    private Node<T> root = null;
+    
     
     public GenericBinaryTree() {
         
+    }
+    
+    
+    protected void setRoot(Node<T> node) {
+        root = node;
+    }
+    
+    protected Node<T> getRoot() {
+        return root;
+    }
+    
+    public boolean isEmpty() {
+        return root == null;
     }
     
     public GenericBinaryTree(T[] values) {
@@ -65,5 +79,61 @@ public class GenericBinaryTree<T> {
         return findAllMatches(value -> true);
     }
     
+    public int getLongestPath() {
+        int steps = getLongestPath(root, 0);
+        return steps;
+    }
+    
+    private int getLongestPath(Node<T> node, int steps) {
+        if (node == null) return steps;
+        steps++;
+        return Math.max(getLongestPath(node.right(), steps), 
+                getLongestPath(node.left(), steps));
+    }
+    
+    public int getShortestPath() {
+        int steps = getShortestPath(root, 0);
+        return steps;
+    }
+    
+    private int getShortestPath(Node<T> node, int steps) {
+        if (node == null) return steps;
+        steps++;
+        return Math.min(getShortestPath(node.right(), steps), 
+                getShortestPath(node.left(), steps));
+    }
+    
+    public boolean isBalanced() {
+        return Math.abs(getLongestPath() - getShortestPath()) <= 1; 
+    }
+    
+    public boolean deleteSubtreeAt(Predicate<T> pred)  {
+        
+        Node<T> target = findNodeAt(pred);
+        boolean result = target != null;
+        
+        if (target == getRoot()) {
+            setRoot(null);
+        } else if (result) {
+            target.parent().deleteChild(target);
+        }
+        
+        return result;
+    }
+    
+    private Node<T> findNodeAt(Predicate<T> pred) {
+        if (isEmpty()) return null;
+        
+        Queue<Node<T>> queue = new LinkedList<>();
+        queue.add(getRoot());
+        while(!queue.isEmpty()) {
+            Node<T> node = queue.remove();
+            if (pred.test(node.value())) return node;
+            if (node.left() != null) queue.add(node.left());
+            if (node.right() != null) queue.add(node.right());
+        }
+        
+        return null;
+    }
     
 }
