@@ -18,14 +18,34 @@ class Node<T> {
     
     public void setRight(Node<T> node) {
         right = node;
+        if (right != null) right.setParent(this);
     }
     
     public void setLeft(Node<T> node) {
         left = node;
+        if (left != null) left.setParent(this);
+
+    }
+    
+    public void setParent(Node<T> node) {
+        parent = node;
+    }
+    
+    public void setValue(T value) {
+        this.value = value;
     }
     
     public String toString() {
         return value.toString();
+    }
+    
+    public boolean isLeafNode() {
+        return left == null && right == null;
+    }
+    
+    public void deleteChild(Node<T> node) {
+        if (node == left) left = null;
+        else if (node == right) right = null;
     }
 
 }
