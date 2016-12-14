@@ -187,5 +187,131 @@ public class GenericBinaryTreeTest {
         
         assertEquals(expectedList, tree.getValuesAtEachLevel());
     }
+    
+    @Test
+    public void testGetNextSuccessor() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        List<List<Node<Integer>>> nodes = tree.getValuesAtEachLevel();
+        /*
+         *               1
+         *             /   \
+         *            /     \
+         *           /       \
+         *          /         \
+         *         /           \
+         *        /             \
+         *        2              3
+         *      /  \            /  \
+         *     /    \          /    \
+         *    /      \        /      \
+         *    4       5       6       7
+         *  /  \    /  \    /  \    /  \
+         * 08  09  10  11  12  13  14  15  
+         */
+        Node<Integer> leftChildLeaf = nodes.get(3).get(0); // Node '8'  
+        assertEquals(nodes.get(2).get(0), tree.getNextSuccessor(leftChildLeaf)); // Node '4'
+        
+        Node<Integer> rightChildLeaf = nodes.get(3).get(3); // Node '11'
+        assertEquals(nodes.get(0).get(0), tree.getNextSuccessor(rightChildLeaf)); // Node '1'
+        
+        Node<Integer> lastNodeInOrder = nodes.get(3).get(7);
+        assertNull(tree.getNextSuccessor(lastNodeInOrder));
+    }
+    
+    @Test
+    public void testGetCommonAncestorOneIsAncestor() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        List<List<Node<Integer>>> nodes = tree.getValuesAtEachLevel();
+        
+        Node<Integer> root = nodes.get(0).get(0);
+        Node<Integer> leaf = nodes.get(3).get(0);
+        
+        assertEquals(root, tree.getClosestCommonAncestor(root, leaf));
+    }
+    
+    @Test
+    public void testGetCommonAncestorOtherIsAncestor() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        List<List<Node<Integer>>> nodes = tree.getValuesAtEachLevel();
+        
+        Node<Integer> root = nodes.get(0).get(0);
+        Node<Integer> leaf = nodes.get(3).get(0);
+        
+        assertEquals(root, tree.getClosestCommonAncestor(leaf, root));
+    }
+    
+    @Test
+    public void testGetCommonAncestorNeitherIsAncestor() {
+        Integer[] treeValues = {
+                1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        
+        List<List<Node<Integer>>> nodes = tree.getValuesAtEachLevel();
+        
+        Node<Integer> ancestor = nodes.get(1).get(0); // Node '2'
+        Node<Integer> leafOne = nodes.get(3).get(0); // Node '8'
+        Node<Integer> leafOther = nodes.get(3).get(3); //Node '3'
+        
+        assertEquals(ancestor, tree.getClosestCommonAncestor(leafOne, leafOther));
+    }
+    
+    @Test
+    public void testIsASubtree() {
+        Integer[] treeValues = new Integer[31];
+        for (int i = 0; i < treeValues.length; i++) treeValues[i] = i + 1;
+        
+        Integer[] subTreeValues = { 
+                7,
+                14, 15,
+                28, 29, 30, 31
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        GenericBinaryTree<Integer> otherTree = new GenericBinaryTree<>(subTreeValues);
+        
+        assertTrue(tree.isSubtree(otherTree));
+    }
+    
+    @Test
+    public void testIsNotASubtree() {
+        Integer[] treeValues = new Integer[31];
+        for (int i = 0; i < treeValues.length; i++) treeValues[i] = i + 1;
+        
+        Integer[] subTreeValues = { 
+                7,
+                14, 17,
+                28, 29, 30, 31
+        };
+        
+        tree = new GenericBinaryTree<>(treeValues);
+        GenericBinaryTree<Integer> otherTree = new GenericBinaryTree<>(subTreeValues);
+        
+        assertFalse(tree.isSubtree(otherTree));
+    }
 
 }

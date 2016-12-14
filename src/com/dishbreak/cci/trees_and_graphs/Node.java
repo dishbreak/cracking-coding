@@ -1,5 +1,8 @@
 package com.dishbreak.cci.trees_and_graphs;
 
+import java.util.Queue;
+import java.util.Stack;
+
 class Node<T> {
     
     private Node<T> left = null;
@@ -43,6 +46,18 @@ class Node<T> {
         return left == null && right == null;
     }
     
+    public boolean isLeftChild() {
+        boolean result = false;
+        if (parent != null && parent.left() == this) result = true;
+        return result;
+    }
+    
+    public boolean isRightChild() {
+        boolean result = false;
+        if (parent != null && parent.right() == this) result = true;
+        return result;
+    }
+    
     public void deleteChild(Node<T> node) {
         if (node == left) left = null;
         else if (node == right) right = null;
@@ -60,6 +75,16 @@ class Node<T> {
     
     public int hashCode() {
         return value.hashCode();
+    }
+    
+    public void addChildrenToStack(Stack<Node<T>> stack) {
+        if (this.left() != null) stack.push(this.left());
+        if (this.right() != null) stack.push(this.right());
+    }
+    
+    public void addChildrenToQueue(Queue<Node<T>> queue) {
+        if (this.left() != null) queue.add(this.left());
+        if (this.right() != null) queue.add(this.right());
     }
 
 }

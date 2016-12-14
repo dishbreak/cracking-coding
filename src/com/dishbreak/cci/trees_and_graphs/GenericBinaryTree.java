@@ -1,7 +1,7 @@
 package com.dishbreak.cci.trees_and_graphs;
 
 import java.lang.reflect.Array;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.*;
 
 public class GenericBinaryTree<T> {
@@ -122,10 +122,16 @@ public class GenericBinaryTree<T> {
     }
     
     private Node<T> findNodeAt(Predicate<T> pred) {
+        // TODO Auto-generated method stub
+        return findNodeAt(pred, getRoot());
+    }
+
+
+    private Node<T> findNodeAt(Predicate<T> pred, Node<T> startingPoint) {
         if (isEmpty()) return null;
         
         Queue<Node<T>> queue = new LinkedList<>();
-        queue.add(getRoot());
+        queue.add(startingPoint);
         while(!queue.isEmpty()) {
             Node<T> node = queue.remove();
             if (pred.test(node.value())) return node;
@@ -162,5 +168,109 @@ public class GenericBinaryTree<T> {
         list.add(levelList);
         loadAtLevel(list, level);
     }
+    
+    public Node<T> getNextSuccessor(Node<T> node) {
+        if (node.isLeafNode()) {
+            if (node.isLeftChild()) {
+                return node.parent();
+            } else if (node.isRightChild()) {
+                if (node.parent() != null)  {
+                    if (node.parent().isLeftChild()) {
+                        return node.parent().parent();
+                    } else {
+                        Node<T> iter = node; 
+                        while (iter != null && iter.isRightChild()) {
+                            iter = iter.parent();
+                        }
+                        if (iter != null) iter = iter.parent();
+                        return iter;
+                    }
+                }
+            }
+            return null; 
+        } else {
+            Node<T> iter = node.right();
+            while(iter != null && !iter.isLeafNode()) {
+                iter = iter.left();
+            }
+            return iter;
+        }
+    }
+    
+    private Node<T> searchSubtree(Predicate<Node<T>> pred, Node<T> startingPoint) {
+        Queue<Node<T>> queue = new LinkedList<>();
+        queue.add(startingPoint);
+        
+        while(!queue.isEmpty()) {
+            Node<T> node = queue.remove();
+            if (pred.test(node)) return node;
+            node.addChildrenToQueue(queue);
+        }
+        
+        return null;
+    }
+    
+    public Node<T> getClosestCommonAncestor(Node<T> oneNode, Node<T> otherNode) {
+        Node<T> result = null;
+        
+        // Case 1: oneNode is an ancestor of otherNode
+        result = (searchSubtree(n -> {return n.equals(otherNode);}, oneNode) != null) ? oneNode : null;
+        
+        // Case 2: otherNode is an ancestor of oneNode
+        if (result == null) {
+            result = (searchSubtree(n -> {return n.equals(oneNode);}, otherNode) != null) ? otherNode : null;
+        }
+        
+        // Case 3: oneNode and otherNode have a common ancestor. 
+        if (result == null) {
+            Function<Node<T>, Node<T>> getChild = (oneNode.isRightChild()) ?  n -> n.left() :  n -> n.right();
+            Node<T> iter = oneNode.parent();
+            
+            while(iter != null) {
+                result = (searchSubtree(n -> { return n.equals(otherNode); }, getChild.apply(iter)) != null) ? iter : null;
+                if (result != null) break;
+                iter = iter.parent();
+            }
+        }
+        
+        return result;
+    }
+    
+    public boolean isSubtree(GenericBinaryTree<T> other) {
+        Queue<Node<T>> startingQueue = new LinkedList<>();
+        Stack<Node<T>> stack = new Stack<>();
+        stack.push(getRoot());
+        
+        while (!stack.isEmpty()) {
+            Node<T> node = stack.pop();
+            if (node.equals(other.getRoot())) startingQueue.add(node);
+            node.addChildrenToStack(stack);
+        }
+        
+        boolean result = true;
+        while (!startingQueue.isEmpty()) {
+            Queue<Node<T>> queue = new LinkedList<>();
+            queue.add(startingQueue.remove());
+            
+            Queue<Node<T>> referenceQueue = new LinkedList<>();
+            referenceQueue.add(other.getRoot());
+            
+            result = true;
+            while (!queue.isEmpty() && result == true) {
+                Node<T> node = queue.remove();
+                Node<T> otherNode = referenceQueue.remove();
+                if (!node.equals(otherNode)) {
+                    result = false;
+                } else {
+                    node.addChildrenToQueue(queue);
+                    otherNode.addChildrenToQueue(referenceQueue);
+                }
+            }
+            if (result) break;
+        }
+        
+        return result;
+    }
+    
     
 }
