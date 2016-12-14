@@ -47,5 +47,19 @@ class Node<T> {
         if (node == left) left = null;
         else if (node == right) right = null;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        boolean result = false;
+        if (o instanceof Node) {
+            Node<?> node = (Node<?>) o;
+            result = value.equals(node.value());
+        }
+        return result;
+    }
+    
+    public int hashCode() {
+        return value.hashCode();
+    }
 
 }

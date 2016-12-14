@@ -185,7 +185,7 @@ public class GenericBinaryTreeTest {
             expectedList.add(list);
         }
         
-        assertEquals(expectedList.toString(), tree.getValuesAtEachLevel().toString());
+        assertEquals(expectedList, tree.getValuesAtEachLevel());
     }
 
 }
