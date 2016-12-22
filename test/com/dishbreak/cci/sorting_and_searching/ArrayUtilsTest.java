@@ -30,4 +30,27 @@ public class ArrayUtilsTest {
         assertArrayEquals(mergedArray, largeArray);
         
     }
+    
+    @Test
+    public void testSortAnagrams() {
+        String[] input = {
+                "book",
+                "bar",
+                "koob",
+                "arb",
+                "kobo",
+                "rab"
+        };
+        
+        String[] expected = {
+                "bar",
+                "arb",
+                "rab",
+                "book",
+                "koob",
+                "kobo"
+        };
+        
+        assertArrayEquals(expected, ArrayUtils.sortAnagrams(input));
+    }
 }

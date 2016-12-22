@@ -1,5 +1,8 @@
 package com.dishbreak.cci.sorting_and_searching;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.Function;
 
 public class ArrayUtils {
 
@@ -67,6 +70,22 @@ public class ArrayUtils {
             largeArray[endPtr] = selectedValue;
             endPtr -= 1;
         }
+    }
+
+    public static String[] sortAnagrams(String[] input) {
+        Function<String, String> sortChars = (String source) -> {
+            char[] o1array = source.toCharArray();
+            Arrays.sort(o1array);
+            return new String(o1array);
+        };
+        
+        Comparator<String> comp = (String o1, String o2) -> { 
+            return sortChars.apply(o1).compareTo(sortChars.apply(o2));
+        }; 
+        
+        Arrays.sort(input, comp);
+        
+        return input;
     }
     
     
