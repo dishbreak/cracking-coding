@@ -87,6 +87,20 @@ public class ArrayUtils {
         
         return input;
     }
+
+    public static int findStringInSparseArray(String[] source, String string) {
+        int result = -1;
+        for (int i = 0; i < source.length; i++) {
+            if (!source[i].equals("")) {
+                int compareValue = string.compareTo(source[i]);
+                if (compareValue == 0) {
+                    result = i;
+                } 
+            }
+        }
+        
+        return result;
+    }
     
     
     

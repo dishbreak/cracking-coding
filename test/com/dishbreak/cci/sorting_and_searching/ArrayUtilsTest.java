@@ -53,4 +53,20 @@ public class ArrayUtilsTest {
         
         assertArrayEquals(expected, ArrayUtils.sortAnagrams(input));
     }
+    
+    @Test
+    public void testFindStringInSparseArrayPositive() {
+        String[] source = {"at", "", "", "", "ball", "", "", "car", "", "", "dad", "", ""};
+        int index = ArrayUtils.findStringInSparseArray(source, "ball");
+        assertEquals(4, index);
+    }
+    
+    
+    @Test
+    public void testFindStringInSparseArrayNegative() {
+        String source[] = {"at", "", "", "", "ball", "car", "", "", "dad", "", ""};
+        int index = ArrayUtils.findStringInSparseArray(source, "ballcar");
+        assertEquals(-1, index);
+    }
+    
 }
