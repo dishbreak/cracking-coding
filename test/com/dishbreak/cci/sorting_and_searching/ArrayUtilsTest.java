@@ -18,6 +18,22 @@ public class ArrayUtilsTest {
         assertEquals(8, ArrayUtils.findInRotated(input, 5));
         assertEquals(1, ArrayUtils.findInRotated(input, 16));
     }
+    
+    @Test
+    public void testFindInSortedExists() {
+        int[] input = {1, 2, 3, 4, 5, 6, 7, 9, 11, 12 };
+        int target = 4;
+        
+        assertEquals(3, ArrayUtils.findInSortedArray(input, target));
+    }
+    
+    @Test
+    public void testFindInSortedNotExists() {
+        int[] input = {1, 2, 3, 4, 5, 6, 7, 9, 11, 12 };
+        int target = 8;
+        
+        assertEquals(-1, ArrayUtils.findInSortedArray(input, target));
+    }
 
     @Test
     public void testMergeArrays() {
@@ -67,6 +83,13 @@ public class ArrayUtilsTest {
         String source[] = {"at", "", "", "", "ball", "car", "", "", "dad", "", ""};
         int index = ArrayUtils.findStringInSparseArray(source, "ballcar");
         assertEquals(-1, index);
+    }
+    
+    @Test
+    public void testFindLongestNonDecreasingSequence() {
+        int[] input = { 5, 3, 4, 8, 6, 7, 9, 2, 15 };
+        
+        assertEquals(3, ArrayUtils.findLongestNonDecreasingSequenceLength(input));
     }
     
 }

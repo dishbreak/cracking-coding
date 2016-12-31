@@ -9,48 +9,55 @@ public class ArrayUtils {
     public ArrayUtils() {
         // TODO Auto-generated constructor stub
     }
+    
+    public static int findInSortedArray(int[] array, int target) {
+        int index = -1;
+        
+        int lower = 0;
+        int upper = array.length - 1;
+        
+        while (lower <= upper) {
+            int midpoint = (lower + upper) / 2;
+            if (array[midpoint] == target) {
+                index = midpoint;
+                break;
+            } else if (array[midpoint] < target) {
+                lower = midpoint + 1;
+            } else {
+                upper = midpoint - 1;
+            }
+        }
+        
+        return index;
+    }
 
     public static int findInRotated(int[] input, int target) {
         int result = -1;
         
-        int rotationPoint = findRotationPoint(input, 0, input.length-1);
-        result = binarySearch(input, 0, input.length -1, rotationPoint, target);
+        int lower = 0;
+        int upper = input.length - 1;
         
-        return result;
-    }
-
-    private static int findRotationPoint(int[] input, int start, int end) {
-        
-        if (input[start] < input[end] || start == end) return start;
-        else if (end - start == 1) return end;
-        
-        int midpoint = start + end / 2;
-        if (input[start] < input[midpoint]) return findRotationPoint(input, midpoint, end);
-        else return findRotationPoint(input, start, midpoint);
-    }
-    
-    private static int binarySearch(int[] input, int start, int end, int rotationPoint, int target) {
-        int startRemap = remap(start, rotationPoint, input.length);
-        if (start == end && input[startRemap] != target) {
-            return -1;
-        }
-  
-        else {
-            int midpoint = start + end / 2;
-            int midpointRemap = remap(midpoint, rotationPoint, input.length);
-            if (input[midpointRemap] < target) {
-                return binarySearch(input, midpoint, end, rotationPoint, target);
-            } else if (input[midpointRemap] > target) {
-                return binarySearch(input, start, midpoint, rotationPoint, target);
-            } else { // input[midpointRemap] == target
-                return midpointRemap;
+        while (lower <= upper) {
+            int midpoint  = (lower + upper) / 2;
+            if (input[midpoint] == target) {
+                result = midpoint;
+                break;
+            } else if (input[lower] <= input[upper]) {
+                if (target < input[midpoint]) {
+                    upper = midpoint - 1;
+                } else {
+                    lower = midpoint + 1;
+                }
+            } else if (target < input[midpoint]) {
+                upper = midpoint - 1;
+            } else if (target <= input[upper] ) {
+                lower = midpoint + 1;
+            } else {
+                upper = midpoint - 1;
             }
         }
         
-    }
-    
-    private static int remap(int index, int rotation, int length) {
-        return (index + length - rotation) % length;
+        return result;
     }
 
     public static void mergeArrays(int[] largeArray, int[] smallArray) {
@@ -90,19 +97,52 @@ public class ArrayUtils {
 
     public static int findStringInSparseArray(String[] source, String string) {
         int result = -1;
-        for (int i = 0; i < source.length; i++) {
-            if (!source[i].equals("")) {
-                int compareValue = string.compareTo(source[i]);
-                if (compareValue == 0) {
-                    result = i;
-                } 
+        
+        int lower = 0;
+        int upper = source.length - 1;
+        
+        while (lower <= upper) {
+            int midpoint = (lower + upper) / 2;
+            while(source[midpoint].equals("") && midpoint < upper) {
+                midpoint++;
             }
+            
+            if (source[midpoint].compareTo("") == 0) break;
+            
+            int compare = source[midpoint].compareTo(string);
+            if (compare == 0) {
+                result = midpoint;
+                break;
+            }
+            
+            if (compare > 0) upper = midpoint - 1;
+            else lower = midpoint + 1;
         }
         
         return result;
     }
     
     
-    
+    public static int findLongestNonDecreasingSequenceLength(int[] input) {
+        int result = 0;
+        
+        int[] lengths = new int[input.length];
+        
+        for (int i = 0; i < lengths.length; i++) {
+            lengths[i] = 1;
+        }
+        
+        
+        for (int i = 1; i < input.length; i++) {
+            if (input[i-1] < input[i]) {
+                lengths[i] = lengths[i-1] + 1;
+                if (result < lengths[i]) {
+                    result = lengths[i];
+                }
+            }
+        }
+        
+        return result;
+    }
 
 }
