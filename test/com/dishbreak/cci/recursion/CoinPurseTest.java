@@ -28,7 +28,17 @@ public class CoinPurseTest {
     
     @Test
     public void testCoinCombosBasicInput() {
-        assertEquals(0, CoinPurse.getCoinCombos(16));
+        assertEquals(4, CoinPurse.getCoinCombos(16));
+    }
+    
+    @Test
+    public void testCoinCombosZeroInput() {
+        assertEquals(0, CoinPurse.getCoinCombos(0));
+    }
+    
+    @Test
+    public void testCoinCombosNegativeInput() {
+        assertEquals(0, CoinPurse.getCoinCombos(-5));
     }
 
 }

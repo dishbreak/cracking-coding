@@ -9,7 +9,7 @@ public class CoinPurse {
         
         if (number == 0 ) return 0;
          
-        getSolutions(0, number, result);
+        result = getSolutions(0, number, result);
         
         return result;
     }
@@ -35,14 +35,13 @@ public class CoinPurse {
         return states[sum].intValue();
     }
 
-    public static void getSolutions(int denomIdx, int number, Integer result) {
-        if (number < 0) return;
+    public static Integer getSolutions(int denomIdx, int number, Integer result) {
+        if (number < 0) return result;
         if (number == 0) {
-            result++;
-            return;
+            return result + 1;
         }
         
-        if (denomIdx == denominations.length) return;
+        if (denomIdx == denominations.length) return result;
         int denomination = denominations[denomIdx];
         
         for (int i=denomIdx; i < denominations.length && denomination > number; i++) {
@@ -54,8 +53,10 @@ public class CoinPurse {
         int nextNumber = number;
         while(nextNumber > 0) {
             nextNumber -= denomination;
-            getSolutions(denomIdx + 1, nextNumber, result);
+            result += getSolutions(denomIdx + 1, nextNumber, result);
         }
+        
+        return result;
     }
     
     
