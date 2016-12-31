@@ -1,5 +1,6 @@
 package com.dishbreak.cci.trees_and_graphs;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 public class GraphNode {
@@ -25,6 +26,12 @@ public class GraphNode {
     public void visitNeighbors(Consumer<GraphNode> func) {
         for(GraphNode node : connections.keySet()) {
             func.accept(node);
+        }
+    }
+    
+    public void visitNeighborWeights(Consumer<Entry<GraphNode, Integer>> func) {
+        for(Entry<GraphNode, Integer> entry : connections.entrySet()) {
+            func.accept(entry);
         }
     }
     
